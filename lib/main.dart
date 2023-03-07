@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
 
 void main() {
-  runApp(MaterialApp(home: MyApp()));
+  runApp(MaterialApp(title: "神的語言轉換器",home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {

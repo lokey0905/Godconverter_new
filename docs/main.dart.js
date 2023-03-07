@@ -22611,7 +22611,7 @@ if(s)throw A.e(A.kz("`const Object()` cannot be used as the token."))
 A.pw(a)
 if(b!==r.a.get(a))throw A.e(A.kz("Platform interfaces must not be implemented with `implements`"))},
 a2y:function a2y(){},
-aER(){var s,r,q=A.aoo(new A.wf(null),null,"")
+aER(){var s,r,q=A.aoo(new A.wf(null),null,"\u795e\u7684\u8a9e\u8a00\u8f49\u63db\u5668")
 if($.am==null)A.aAZ()
 s=$.am
 s.toString
