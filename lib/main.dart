@@ -3,6 +3,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -35,7 +36,7 @@ class _MyAppState extends State<MyApp> {
       case '18comic':
         _output = 'https://18comic.vip/photo/$input';
         break;
-      case 'Pivix':
+      case 'Pixiv':
         _output = 'https://www.pixiv.net/artworks/$input';
         break;
       default:
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _openDownloadUrl() async {
-    const url = 'https://github.com/your_github_repo';
+    const url = 'https://github.com/lokey0905/Godconverter_new/releases/tag/7.0';
     if (await canLaunch(url)) {
       await launch(url);
     }
@@ -66,13 +67,25 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    Fluttertoast.showToast(
+      msg: '歡迎使用神的語言轉換器',
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: Colors.grey[700],
+      textColor: Colors.white,
+    );
+  }
+
   Future<void> _showFeedbackDialog() async {
     String? feedbackText = '';
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('請輸入您的反饋'),
+          title: const Text('請輸入您的反饋'),
           content: TextField(
             onChanged: (value) {
               feedbackText = value;
@@ -83,16 +96,23 @@ class _MyAppState extends State<MyApp> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('取消'),
+              child: const Text('取消'),
             ),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: (){
                 if (feedbackText != null && feedbackText!.isNotEmpty) {
-                  await _sendFeedback(feedbackText!);
+                  _sendFeedback(feedbackText ?? '');
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                    msg: '已提交您的反饋，感謝您的支持！請勿重複提交！',
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 5,
+                    backgroundColor: Colors.grey[700],
+                    textColor: Colors.white,
+                  );
                 }
-                Navigator.pop(context);
               },
-              child: Text('提交'),
+              child: const Text('提交'),
             ),
           ],
         );
@@ -134,7 +154,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('神的語言轉換器by lokey0905'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.feedback),
+              icon: const Icon(Icons.feedback),
               onPressed: () {
                 _showFeedbackDialog();
               },
@@ -149,7 +169,7 @@ class _MyAppState extends State<MyApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('選擇轉換神的語言: '),
+                  const Text('選擇轉換神的語言: '),
                   DropdownButton<String>(
                     value: _selectedOption,
                     onChanged: (String? newValue) {
@@ -158,7 +178,7 @@ class _MyAppState extends State<MyApp> {
                         _output = '';
                       });
                     },
-                    items: <String>['Nhentai', 'Wnacg', '18comic', 'Pivix']
+                    items: <String>['Nhentai', 'Wnacg', '18comic', 'Pixiv']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -219,6 +239,11 @@ class _MyAppState extends State<MyApp> {
                           _inputController.clear();
                           _output = '';
                         });
+                        Fluttertoast.showToast(
+                          msg: '已清除',
+                          gravity: ToastGravity.BOTTOM,
+                          toastLength: Toast.LENGTH_SHORT,
+                        );
                       },
                     ),
                     const SizedBox(width: 4),
@@ -226,8 +251,10 @@ class _MyAppState extends State<MyApp> {
                       icon: const Icon(Icons.copy),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: _output));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('已複製輸出結果')),
+                        Fluttertoast.showToast(
+                          msg: '已複製輸出結果',
+                          gravity: ToastGravity.BOTTOM,
+                          toastLength: Toast.LENGTH_SHORT,
                         );
                       },
                     ),
@@ -235,6 +262,11 @@ class _MyAppState extends State<MyApp> {
                     IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: () {
+                        Fluttertoast.showToast(
+                          msg: '此功能僅限APP版本使用',
+                          gravity: ToastGravity.BOTTOM,
+                          toastLength: Toast.LENGTH_SHORT,
+                        );
                         Share.share(_output);
                       },
                     ),
