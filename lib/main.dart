@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
 
 void main() {
-  runApp(MaterialApp(title: "神的語言轉換器",home: MyApp()));
+  runApp(MaterialApp(title: "神的語言轉換器by lokey0905",home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -125,13 +125,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '神的語言轉換器',
+      title: '神的語言轉換器by lokey0905',
       theme: ThemeData(
         useMaterial3: true,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('神的語言轉換器'),
+          title: const Text('神的語言轉換器by lokey0905'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.feedback),
