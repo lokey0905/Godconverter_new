@@ -1,11 +1,15 @@
+import 'dart:convert';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io' show Platform;
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -14,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedOption = 'Nenhai';
+  String _selectedOption = 'Nhentai';
   TextEditingController _inputController = TextEditingController();
   String _output = '';
 
@@ -22,16 +26,16 @@ class _MyAppState extends State<MyApp> {
     input = input.trim();
 
     switch (_selectedOption) {
-      case 'Nenhai':
+      case 'Nhentai':
         _output = 'https://nhentai.net/g/$input';
         break;
-      case 'wnacg':
-        _output = 'https://www.wnacg.org/photos-slide-aid-$input.html';
+      case 'Wnacg':
+        _output = 'https://www.Wnacg.org/photos-slide-aid-$input.html';
         break;
       case '18comic':
         _output = 'https://18comic.vip/photo/$input';
         break;
-      case 'pivix':
+      case 'Pivix':
         _output = 'https://www.pixiv.net/artworks/$input';
         break;
       default:
@@ -48,7 +52,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _openWebUrl() async {
-    const url = 'https://github.com/your_github_repo';
+    const url = 'https://lokey0905.github.io/Godconverter_new/';
     if (await canLaunch(url)) {
       await launch(url);
     }
@@ -62,6 +66,62 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> _showFeedbackDialog() async {
+    String? feedbackText = '';
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('請輸入您的反饋'),
+          content: TextField(
+            onChanged: (value) {
+              feedbackText = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('取消'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (feedbackText != null && feedbackText!.isNotEmpty) {
+                  await _sendFeedback(feedbackText!);
+                }
+                Navigator.pop(context);
+              },
+              child: Text('提交'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _sendFeedback(String feedbackText) async {
+    String platform = '';
+    if (kIsWeb) {
+      platform = 'WEB';
+    } else {
+      if (Platform.isAndroid) {
+        platform = 'Android';
+      } else if (Platform.isIOS) {
+        platform = 'iOS';
+      } else if (Platform.isLinux) {
+        platform = 'Linux';
+      } else if (Platform.isMacOS) {
+        platform = 'Mac';
+      } else if (Platform.isWindows) {
+        platform = 'Windows';
+      }
+    }
+
+    final String url = 'https://maker.ifttt.com/trigger/app/with/key/bInYP_q7K-R3F2RVymuvcE?value1=<br>平台:$platform<br>內容:$feedbackText';
+    await http.get(Uri.parse(url));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,26 +132,41 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('神的語言轉換器'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.feedback),
+              onPressed: () {
+                _showFeedbackDialog();
+              },
+            ),
+          ],
         ),
+
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              DropdownButton<String>(
-                value: _selectedOption,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedOption = newValue!;
-                    _output = '';
-                  });
-                },
-                items: <String>['Nenhai', 'wnacg', '18comic', 'pivix']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('選擇轉換神的語言: '),
+                  DropdownButton<String>(
+                    value: _selectedOption,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedOption = newValue!;
+                        _output = '';
+                      });
+                    },
+                    items: <String>['Nhentai', 'Wnacg', '18comic', 'Pivix']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               Card(
@@ -100,7 +175,7 @@ class _MyAppState extends State<MyApp> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   child: TextField(
                     controller: _inputController,
                     onChanged: (String input) {
@@ -117,7 +192,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: Row(
                   children: [
                     Expanded(
@@ -136,7 +211,17 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 4),
+                    IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          _inputController.clear();
+                          _output = '';
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 4),
                     IconButton(
                       icon: const Icon(Icons.copy),
                       onPressed: () {
@@ -146,7 +231,7 @@ class _MyAppState extends State<MyApp> {
                         );
                       },
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 4),
                     IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: () {
@@ -171,7 +256,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                         child: const Text(
-                          '開啟外部瀏覽器',
+                          '在外部開啟',
                           style: TextStyle(fontSize: 14),
                         ),
                       ),
