@@ -12,7 +12,6 @@ import 'dart:io' show Platform;
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
-  Fluttertoast.showToast(msg: "", backgroundColor: Colors.transparent);
   runApp(MaterialApp(
       builder: FToastBuilder(),
       title: "神的語言轉換器by lokey0905",
@@ -83,46 +82,33 @@ class _MyAppState extends State<MyApp> {
     fToast = FToast();
     // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
     fToast.init(context);
-    //_showToast();
+    _showToast('歡迎使用神的語言轉換器', duration: const Duration(seconds: 5));
   }
 
-  _showToast() {
+  void _showToast(String text, {Duration duration = const Duration(seconds: 2)}) {
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
         color: Colors.greenAccent,
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.check),
-          SizedBox(
+          const Icon(Icons.check),
+          const SizedBox(
             width: 12.0,
           ),
-          Text("This is a Custom Toast"),
+          Text(text),
         ],
       ),
     );
 
-
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: const Duration(seconds: 2),
+      toastDuration: duration,
     );
-
-    // Custom Toast Position
-    fToast.showToast(
-        child: toast,
-        toastDuration: const Duration(seconds: 2),
-        positionedToastBuilder: (context, child) {
-          return Positioned(
-            child: child,
-            top: 16.0,
-            left: 16.0,
-          );
-        });
   }
 
   Future<void> _showFeedbackDialog() async {
@@ -149,7 +135,7 @@ class _MyAppState extends State<MyApp> {
                 if (feedbackText != null && feedbackText!.isNotEmpty) {
                   _sendFeedback(feedbackText ?? '');
                   Navigator.pop(context);
-                  Fluttertoast.showToast(msg: '已提交您的反饋，感謝您的支持！請勿重複提交！');
+                  _showToast('已提交您的反饋，感謝您的支持！請勿重複提交！', duration: const Duration(seconds: 5));
                 }
               },
               child: const Text('提交'),
@@ -279,12 +265,7 @@ class _MyAppState extends State<MyApp> {
                           _inputController.clear();
                           _output = '';
                         });
-                        _showToast();
-                        Fluttertoast.showToast(
-                          msg: '已清除',
-                          gravity: ToastGravity.BOTTOM,
-                          toastLength: Toast.LENGTH_SHORT,
-                        );
+                        _showToast('已清除');
                       },
                     ),
                     const SizedBox(width: 4),
@@ -292,22 +273,14 @@ class _MyAppState extends State<MyApp> {
                       icon: const Icon(Icons.copy),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: _output));
-                        Fluttertoast.showToast(
-                          msg: '已複製輸出結果',
-                          gravity: ToastGravity.BOTTOM,
-                          toastLength: Toast.LENGTH_SHORT,
-                        );
+                        _showToast('已複製輸出結果');
                       },
                     ),
                     const SizedBox(width: 4),
                     IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: () {
-                        Fluttertoast.showToast(
-                          msg: '此功能僅限APP版本使用',
-                          gravity: ToastGravity.BOTTOM,
-                          toastLength: Toast.LENGTH_SHORT,
-                        );
+                        _showToast('此功能僅限APP版本使用');
                         Share.share(_output);
                       },
                     ),
