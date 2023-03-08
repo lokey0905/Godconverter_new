@@ -12,6 +12,7 @@ import 'dart:io' show Platform;
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
+  Fluttertoast.showToast(msg: "", backgroundColor: Colors.transparent);
   runApp(MaterialApp(
       builder: FToastBuilder(),
       title: "神的語言轉換器by lokey0905",
@@ -78,6 +79,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    FToast fToast = FToast();
+    fToast.init(navigatorKey.currentContext!);
     Fluttertoast.showToast(
       msg: '歡迎使用神的語言轉換器',
       gravity: ToastGravity.BOTTOM,
@@ -111,13 +114,7 @@ class _MyAppState extends State<MyApp> {
                 if (feedbackText != null && feedbackText!.isNotEmpty) {
                   _sendFeedback(feedbackText ?? '');
                   Navigator.pop(context);
-                  Fluttertoast.showToast(
-                    msg: '已提交您的反饋，感謝您的支持！請勿重複提交！',
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 5,
-                    backgroundColor: Colors.grey[700],
-                    textColor: Colors.white,
-                  );
+                  Fluttertoast.showToast(msg: '已提交您的反饋，感謝您的支持！請勿重複提交！');
                 }
               },
               child: const Text('提交'),
