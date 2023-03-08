@@ -145,6 +145,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: FToastBuilder(),
       title: '神的語言轉換器by lokey0905',
       theme: ThemeData(
         useMaterial3: true,
