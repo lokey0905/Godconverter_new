@@ -9,8 +9,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
-  runApp(MaterialApp(title: "神的語言轉換器by lokey0905",home: MyApp()));
+  runApp(MaterialApp(
+      builder: FToastBuilder(),
+      title: "神的語言轉換器by lokey0905",
+      home: MyApp(),
+    navigatorKey: navigatorKey,
+  )
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -145,7 +153,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: FToastBuilder(),
       title: '神的語言轉換器by lokey0905',
       theme: ThemeData(
         useMaterial3: true,
