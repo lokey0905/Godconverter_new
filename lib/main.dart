@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   String _selectedOption = 'Nhentai';
   TextEditingController _inputController = TextEditingController();
   String _output = '';
+  late FToast fToast;
 
   void _convert(String input) {
     input = input.trim();
@@ -79,15 +80,49 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    FToast fToast = FToast();
-    fToast.init(navigatorKey.currentContext!);
-    Fluttertoast.showToast(
-      msg: '歡迎使用神的語言轉換器',
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 5,
-      backgroundColor: Colors.grey[700],
-      textColor: Colors.white,
+    fToast = FToast();
+    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
+    fToast.init(context);
+    //_showToast();
+  }
+
+  _showToast() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("This is a Custom Toast"),
+        ],
+      ),
     );
+
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: const Duration(seconds: 2),
+    );
+
+    // Custom Toast Position
+    fToast.showToast(
+        child: toast,
+        toastDuration: const Duration(seconds: 2),
+        positionedToastBuilder: (context, child) {
+          return Positioned(
+            child: child,
+            top: 16.0,
+            left: 16.0,
+          );
+        });
   }
 
   Future<void> _showFeedbackDialog() async {
@@ -244,6 +279,7 @@ class _MyAppState extends State<MyApp> {
                           _inputController.clear();
                           _output = '';
                         });
+                        _showToast();
                         Fluttertoast.showToast(
                           msg: '已清除',
                           gravity: ToastGravity.BOTTOM,
