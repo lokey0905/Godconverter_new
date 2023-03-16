@@ -30,29 +30,42 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedOption = 'Nhentai';
+  String _selectedOption = 'N站 nhentai';
   TextEditingController _inputController = TextEditingController();
   String _output = '';
+  List<String> _imageUrls = ['https://icons.veryicon.com/png/o/commerce-shopping/soft-designer-online-tools-icon/delete-77.png'];
   late FToast fToast;
+  bool _isDarkMode = false;
+
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
 
   void _convert(String input) {
     input = input.trim();
-
     switch (_selectedOption) {
-      case 'Nhentai':
+      case 'N站 nhentai':
         _output = 'https://nhentai.net/g/$input';
         break;
-      case 'Wnacg':
-        _output = 'https://www.Wnacg.org/photos-slide-aid-$input.html';
+      case 'W站 紳士漫畫 wnacg':
+        _output = 'https://www.wnacg.org/photos-slide-aid-$input.html';
+        if (input.length > 5) {
+          _imageUrls = ['https://img4.qy0.ru/data/${input.substring(0, 4)}/${input.substring(4, 6)}/00A.jpg'];
+        }
         break;
-      case '18comic':
+      case 'JM 禁漫 18comic':
         _output = 'https://18comic.vip/photo/$input';
+        _imageUrls = ['https://cdn-msp.18comic.org/media/albums/$input.jpg'];
         break;
-      case 'Pixiv':
+      case 'P站 Pixiv':
         _output = 'https://www.pixiv.net/artworks/$input';
+        _imageUrls = ['https://embed.pixiv.net/decorate.php?illust_id=$input'];
         break;
       default:
         _output = '';
+        _imageUrls = ['https://icons.veryicon.com/png/o/commerce-shopping/soft-designer-online-tools-icon/delete-77.png'];
     }
     setState(() {});
   }
@@ -85,7 +98,6 @@ class _MyAppState extends State<MyApp> {
     fToast = FToast();
     // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
     fToast.init(context);
-    _showToast('歡迎使用神的語言轉換器', duration: const Duration(seconds: 5));
   }
 
   void _showToast(String text, {Duration duration = const Duration(seconds: 2)}) {
@@ -172,15 +184,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation.toString();
     return MaterialApp(
       title: '神的語言轉換器by lokey0905',
       theme: ThemeData(
+        brightness: _isDarkMode ? Brightness.dark : Brightness.light,
         useMaterial3: true,
       ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('神的語言轉換器by lokey0905'),
           actions: <Widget>[
+            Switch(
+              value: _isDarkMode,
+              onChanged: (value) {
+                _toggleTheme();
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.feedback),
               onPressed: () {
@@ -189,172 +209,226 @@ class _MyAppState extends State<MyApp> {
             ),
           ],
         ),
-
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding( // 增加邊距
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const TextRenderer(
-                    child: Text(
-                      '選擇轉換神的語言: ',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const TextRenderer(
+                        child: Text(
+                          '選擇轉換神的語言: ',
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      DropdownButton<String>(
+                        value: _selectedOption,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedOption = newValue!;
+                            //_output = '';
+                            _convert(_inputController.text);
+                          });
+                        },
+                        items: <String>['N站 nhentai', 'W站 紳士漫畫 wnacg', 'JM 禁漫 18comic', 'P站 Pixiv']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * (orientation=='Orientation.portrait'?0.9:0.6),
+                      child: TextField(
+                        controller: _inputController,
+                        onChanged: (String input) {
+                          _convert(input);
+                        },
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '神的語言',
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16), // 增加內部間距
+                        ),
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        style: const TextStyle(fontSize: 60),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                  DropdownButton<String>(
-                    value: _selectedOption,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedOption = newValue!;
-                        _output = '';
-                      });
-                    },
-                    items: <String>['Nhentai', 'Wnacg', '18comic', 'Pixiv']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * (orientation=='Orientation.portrait'?0.9:0.6),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                _output,
+                                style: const TextStyle(fontSize: 18),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setState(() {
+                              _inputController.clear();
+                              _output = '';
+                            });
+                            _showToast('已清除');
+                          },
+                        ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: _output));
+                            _showToast('已複製輸出結果');
+                          },
+                        ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          icon: const Icon(Icons.share),
+                          onPressed: () {
+                            _showToast('此功能僅限APP版本使用');
+                            Share.share(_output);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: ElevatedButton(
+                            onPressed: _openOutputUrl,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const TextRenderer(
+                              child: Text(
+                                '在外部開啟',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Flexible(
+                          child: ElevatedButton(
+                            onPressed: _openDownloadUrl,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const TextRenderer(
+                              child: Text(
+                                '下載APP',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Flexible(
+                          child: ElevatedButton(
+                            onPressed: _openWebUrl,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const TextRenderer(
+                              child: Text(
+                                '開啟網頁版',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Flexible(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showToast('因N網禁止機器人 無法獲取預覽圖');
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.network(_imageUrls[0]),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            const Spacer(),
+                                            IconButton(
+                                              icon: const Icon(Icons.close),
+                                              onPressed: () {
+                                                // 關閉對話框
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const TextRenderer(
+                              child: Text(
+                                '預覽縮圖',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: TextField(
-                    controller: _inputController,
-                    onChanged: (String input) {
-                      _convert(input);
-                    },
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '神的語言',
-                    ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    style: const TextStyle(fontSize: 60),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _output,
-                            style: const TextStyle(fontSize: 18),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          _inputController.clear();
-                          _output = '';
-                        });
-                        _showToast('已清除');
-                      },
-                    ),
-                    const SizedBox(width: 4),
-                    IconButton(
-                      icon: const Icon(Icons.copy),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: _output));
-                        _showToast('已複製輸出結果');
-                      },
-                    ),
-                    const SizedBox(width: 4),
-                    IconButton(
-                      icon: const Icon(Icons.share),
-                      onPressed: () {
-                        _showToast('此功能僅限APP版本使用');
-                        Share.share(_output);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: ElevatedButton(
-                        onPressed: _openOutputUrl,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const TextRenderer(
-                          child: Text(
-                            '在外部開啟',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Flexible(
-                      child: ElevatedButton(
-                        onPressed: _openDownloadUrl,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const TextRenderer(
-                          child: Text(
-                            '下載APP',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Flexible(
-                      child: ElevatedButton(
-                        onPressed: _openWebUrl,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const TextRenderer(
-                          child: Text(
-                            '開啟網頁版',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
