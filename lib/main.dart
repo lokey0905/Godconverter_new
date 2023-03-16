@@ -15,7 +15,7 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   runApp(
       RobotDetector(
-        debug: true, // you can set true to enable robot mode
+        debug: false, // you can set true to enable robot mode
         child: MaterialApp(
           builder: FToastBuilder(),
           title: "神的語言轉換器by lokey0905",

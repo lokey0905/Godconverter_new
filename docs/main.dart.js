@@ -22750,7 +22750,7 @@ if($.am==null)A.aBL()
 s=$.am
 s.toString
 r=$.bH()
-s.PX(new A.Lf(r,new A.xH(!0,q,null),new A.jq(r,t.bT)))
+s.PX(new A.Lf(r,new A.xH(!1,q,null),new A.jq(r,t.bT)))
 s.Eb()},
 wr:function wr(a){this.a=a},
 Au:function Au(a,b){var _=this
@@ -73825,9 +73825,13 @@ $S:0}
 A.xH.prototype={
 al(){return new A.B6(A.iB("/bot|google|baidu|bing|msn|teoma|slurp|yandex/i",!0,!1),B.k)}}
 A.B6.prototype={
-aG(){this.aP()
-this.a.toString
-this.e=!0},
+aG(){var s,r=this
+r.aP()
+r.a.toString
+s=window.navigator.userAgent
+s.toString
+s=r.d.b.test(s)
+r.e=s},
 I(a){return this.a.d}}
 A.JV.prototype={
 aA(a){var s=new A.QX(this.e,null,A.ac())
