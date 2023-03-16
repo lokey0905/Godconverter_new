@@ -307,9 +307,11 @@ class _MyAppState extends State<MyApp> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          '在外部開啟',
-                          style: TextStyle(fontSize: 14),
+                        child: const TextRenderer(
+                          child: Text(
+                            '在外部開啟',
+                            style: TextStyle(fontSize: 14),
+                          ),
                         ),
                       ),
                     ),
@@ -323,9 +325,11 @@ class _MyAppState extends State<MyApp> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          '下載APP',
-                          style: TextStyle(fontSize: 14),
+                        child: const TextRenderer(
+                          child: Text(
+                            '下載APP',
+                            style: TextStyle(fontSize: 14),
+                          ),
                         ),
                       ),
                     ),
@@ -339,9 +343,11 @@ class _MyAppState extends State<MyApp> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          '開啟網頁版',
-                          style: TextStyle(fontSize: 14),
+                        child: const TextRenderer(
+                          child: Text(
+                            '開啟網頁版',
+                            style: TextStyle(fontSize: 14),
+                          ),
                         ),
                       ),
                     ),
