@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +6,7 @@ import 'package:seo_renderer/seo_renderer.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io' show Platform, Process;
+import 'dart:io' show Platform;
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -196,15 +194,9 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const TextRenderer(
-                child: Text(
-                  '神的語言轉換器by lokey0905',
-                ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Text('選擇轉換神的語言: '),
                   const TextRenderer(
                     child: Text(
                       '選擇轉換神的語言: ',
@@ -228,11 +220,6 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ],
               ),
-              const TextRenderer(
-                child: Text(
-                  'Nhentai, Wnacg, 18comic, Pixiv',
-                ),
-              ),
               const SizedBox(height: 16),
               Card(
                 elevation: 4,
@@ -254,11 +241,6 @@ class _MyAppState extends State<MyApp> {
                     style: const TextStyle(fontSize: 60),
                     textAlign: TextAlign.center,
                   ),
-                ),
-              ),
-              const TextRenderer(
-                child: Text(
-                  '輸入神的語言: ',
                 ),
               ),
               SizedBox(
@@ -331,11 +313,6 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                     ),
-                    const TextRenderer(
-                      child: Text(
-                        '在外部瀏覽器中開啟',
-                      ),
-                    ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: ElevatedButton(
@@ -352,11 +329,6 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                     ),
-                    const TextRenderer(
-                      child: Text(
-                        '下載APP',
-                      ),
-                    ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: ElevatedButton(
@@ -371,11 +343,6 @@ class _MyAppState extends State<MyApp> {
                           '開啟網頁版',
                           style: TextStyle(fontSize: 14),
                         ),
-                      ),
-                    ),
-                    const TextRenderer(
-                      child: Text(
-                        '開啟網頁版',
                       ),
                     ),
                   ],
