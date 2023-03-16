@@ -4,20 +4,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:seo_renderer/seo_renderer.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, Process;
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
-  runApp(MaterialApp(
-      builder: FToastBuilder(),
-      title: "神的語言轉換器by lokey0905",
-      home: MyApp(),
-    navigatorKey: navigatorKey,
-  )
+  runApp(
+      RobotDetector(
+        debug: true, // you can set true to enable robot mode
+        child: MaterialApp(
+          builder: FToastBuilder(),
+          title: "神的語言轉換器by lokey0905",
+          home: MyApp(),
+          navigatorKey: navigatorKey,
+        ),
+      )
   );
 }
 
@@ -55,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _openDownloadUrl() async {
-    const url = 'https://github.com/lokey0905/Godconverter_new/releases/tag/7.0';
+    const url = 'https://lokey0905.wixsite.com/download';
     if (await canLaunch(url)) {
       await launch(url);
     }
@@ -95,7 +100,6 @@ class _MyAppState extends State<MyApp> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.check),
           const SizedBox(
             width: 12.0,
           ),
@@ -135,7 +139,7 @@ class _MyAppState extends State<MyApp> {
                 if (feedbackText != null && feedbackText!.isNotEmpty) {
                   _sendFeedback(feedbackText ?? '');
                   Navigator.pop(context);
-                  _showToast('已提交您的反饋，感謝您的支持！請勿重複提交！', duration: const Duration(seconds: 5));
+                  _showToast('已提交反饋，感謝您的支持！請勿重複提交！', duration: const Duration(seconds: 5));
                 }
               },
               child: const Text('提交'),
@@ -192,10 +196,20 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const TextRenderer(
+                child: Text(
+                  '神的語言轉換器by lokey0905',
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Text('選擇轉換神的語言: '),
+                  const TextRenderer(
+                    child: Text(
+                      '選擇轉換神的語言: ',
+                    ),
+                  ),
                   DropdownButton<String>(
                     value: _selectedOption,
                     onChanged: (String? newValue) {
@@ -213,6 +227,11 @@ class _MyAppState extends State<MyApp> {
                     }).toList(),
                   ),
                 ],
+              ),
+              const TextRenderer(
+                child: Text(
+                  'Nhentai, Wnacg, 18comic, Pixiv',
+                ),
               ),
               const SizedBox(height: 16),
               Card(
@@ -235,6 +254,11 @@ class _MyAppState extends State<MyApp> {
                     style: const TextStyle(fontSize: 60),
                     textAlign: TextAlign.center,
                   ),
+                ),
+              ),
+              const TextRenderer(
+                child: Text(
+                  '輸入神的語言: ',
                 ),
               ),
               SizedBox(
@@ -307,6 +331,11 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                     ),
+                    const TextRenderer(
+                      child: Text(
+                        '在外部瀏覽器中開啟',
+                      ),
+                    ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: ElevatedButton(
@@ -323,6 +352,11 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                     ),
+                    const TextRenderer(
+                      child: Text(
+                        '下載APP',
+                      ),
+                    ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: ElevatedButton(
@@ -337,6 +371,11 @@ class _MyAppState extends State<MyApp> {
                           '開啟網頁版',
                           style: TextStyle(fontSize: 14),
                         ),
+                      ),
+                    ),
+                    const TextRenderer(
+                      child: Text(
+                        '開啟網頁版',
                       ),
                     ),
                   ],
