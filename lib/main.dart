@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         _output = 'https://nhentai.net/g/$input';
         break;
       case 'W站 紳士漫畫 wnacg':
-        _output = 'https://www.wnacg.org/photos-slide-aid-$input.html';
+        _output = 'https://www.wnacg.com/photos-slide-aid-$input.html';
         if (input.length > 5) {
           _imageUrls = ['https://img4.qy0.ru/data/${input.substring(0, 4)}/${input.substring(4, 6)}/00A.jpg'];
         }
