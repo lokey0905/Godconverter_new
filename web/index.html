@@ -14,8 +14,8 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="https://lokey0905.github.io/Godconverter_new/">
-  <!--base href="$FLUTTER_BASE_HREF"-->
+  <!--base href="https://lokey0905.github.io/Godconverter_new/"-->
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -42,6 +42,7 @@
 </head>
 <body>
   <script>
+  let useHtml = true;
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
@@ -49,7 +50,10 @@
           serviceWorkerVersion: serviceWorkerVersion,
         },
         onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
+        let config = {
+          renderer: useHtml ? "html" : "canvaskit",
+        };
+          engineInitializer.initializeEngine({ renderer:"html" }).then(function(appRunner) {
             appRunner.runApp();
           });
         }
